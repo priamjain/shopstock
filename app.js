@@ -46,7 +46,15 @@ app.get("/",function(req,res){
 
 });
 
-app.get("/login",function(req,res){
+app.get("/login",function(req,res,next){
+
+	if(req.isAuthenticated()){
+		return res.redirect("/");
+	}
+	else{
+		return next();
+	};
+	},function(req,res){
 	res.render("loginPage");
 });
 
@@ -77,3 +85,10 @@ app.get("/logout",function(req,res){
 app.listen(3000,function(){
 	console.log("Server Started");
 });
+
+function isLoggedIn(req,res,next){
+	if(req.isAuthenticated()){
+		return next();
+	}
+	return res.redirect("/login");
+}
