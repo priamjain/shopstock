@@ -1,0 +1,23 @@
+body{
+	font-family: "serif";
+	background-color: #99badd;
+}
+
+nav button:focus{
+	outline: none;
+}
+
+.navbar-brand{
+	font-size: 1.4rem;
+}
+#maintop{
+	background-image: url("main4.jpg");
+	background-repeat: no-repeat;
+	background-position: 0 8%;
+	background-size: cover;
+	width: 100%;
+	height: 400px;
+	font-size: 1.4rem;
+	object-fit: contain;
+}
+

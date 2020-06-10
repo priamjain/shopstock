@@ -1,0 +1,68 @@
+body{
+	font-family: "serif";
+	background-color: #99badd;
+}
+
+input.form-control:focus
+{
+	box-shadow: none;
+	background-color: transparent;
+	outline: none;
+}
+
+.form-control{
+	transition: none;
+	background-color: transparent;
+	outline: none;
+	border:0;
+	border-bottom: 1px solid #ced4da;
+}
+
+.navbar{
+	font-size: 1.4rem;
+}
+.navbar-brand{
+	font-size: 1.4rem;
+}
+.loginheader a{
+	font-size: 2rem;
+	font-weight: 700;
+}
+
+.bor-bot{
+	border-bottom: 3px solid;
+}
+
+#loginform{
+	margin-top: 10%; 
+	padding: 30px;
+	background-color: #f1f1f1;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 20%;
+}
+
+#login{
+	width: 100%;
+	text-align: left;
+	background-color: #f1f1f1;
+	padding: 20px;
+}
+
+#ologin p{
+	font-size: 1.2rem;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#signup{
+	text-align: left;
+	background-color: #f1f1f1;
+	padding: 20px;
+}
+
+#osignup p{
+	font-size: 1.2rem;
+	text-align: center;
+	margin: 0 auto;
+}
