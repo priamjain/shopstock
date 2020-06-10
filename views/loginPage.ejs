@@ -7,14 +7,14 @@
 		</div>
 		<div id="ologin" class="container">
 			<div id="login" class="container rounded">
-				<form>
+				<form action="/login" method="POST">
 					<div class="form-group">
 						<label for="loginemail">Email address</label>
-						<input type="email" class="form-control" id="loginemail1">
+						<input type="email" class="form-control" name="email" id="loginemail1">
 					</div>
 					<div class="form-group">
 						<label for="loginpass">Password</label>
-						<input type="password" class="form-control" id="loginpass">
+						<input type="password" class="form-control" name="password" id="loginpass">
 					</div>
 					<button type="submit" class="btn btn-primary w-25">Login</button>
 				</form>
@@ -24,22 +24,18 @@
 
 		<div id="osignup" class="container d-none">
 			<div id="signup" class="container rounded">
-				<form>
+				<form action="/register" method="POST">
 					<div class="form-group">
 						<label for="signupname">User Name</label>
-						<input type="Text" class="form-control" id="signupname">
+						<input type="Text" class="form-control" name="username" id="signupname">
 					</div>
 					<div class="form-group">
 						<label for="signupemail">Email address</label>
-						<input type="email" class="form-control" id="signupemail1">
+						<input type="email" class="form-control" name="email" id="signupemail1">
 					</div>
 					<div class="form-group">
 						<label for="signuppass">Password</label>
-						<input type="password" class="form-control" id="signuppass">
-					</div>
-					<div class="form-group">
-						<label for="confirmsignuppass">Confirm Password</label>
-						<input type="password" class="form-control" id="confirmsignuppass">
+						<input type="password" class="form-control" name="password" id="signuppass">
 					</div>
 					<button type="submit" class="btn btn-primary w-25">SignUp</button>
 				</form>
