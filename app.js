@@ -19,7 +19,7 @@ app.use(expressSession({
 //Connect Mongo and USES
 //==========================
 
-mongoose.connect('mongodb://localhost/shops', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect('mongodb+srv://priamjain:N:i4z_-aA2Btq3t@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
