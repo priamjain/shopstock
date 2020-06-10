@@ -41,13 +41,18 @@ passport.deserializeUser(User.deserializeUser());
 //=============================
 
 app.get("/",function(req,res){
-
+	res.locals.page="index";
 	res.render("index",{user:req.user});
 
 });
 
-app.get("/login",function(req,res,next){
+app.get("/bussiness/new",isLoggedIn,function(req,res){
+	res.locals.page = "newBussiness";
+	res.render("newBussiness",{user:req.user});
+});
 
+app.get("/login",function(req,res,next){
+	res.locals.page = "loginPage";
 	if(req.isAuthenticated()){
 		return res.redirect("/");
 	}
@@ -55,7 +60,7 @@ app.get("/login",function(req,res,next){
 		return next();
 	};
 	},function(req,res){
-	res.render("loginPage");
+	res.render("loginPage",{user:req.user});
 });
 
 app.post("/register",function(req,res){

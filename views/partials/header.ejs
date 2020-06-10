@@ -5,7 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="css/loginPage.css">
+
+	<link rel="stylesheet" type="text/css" href="/css/<%=page%>.css">
+
 	<title>Login - ShopStock.com</title>
 </head>
 <body>
@@ -16,6 +18,14 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
 				<li class="nav-item"><a class="nav-link">Contact Us</a></li>
+			</ul>
+			<ul class="navbar-nav">
+				<%if(user){%>
+				<li class="nav-item"><a class="nav-link" href="/user"><%=user.username%></a></li>
+				<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+				<%}else{%>
 				<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+				<%};%>
 			</ul>
 		</div>
+	</nav>

@@ -1,0 +1,16 @@
+body{
+	font-family: "serif";
+	background-color: #99badd;
+}
+
+#shopform{
+	margin-top: 5%;
+	background-color: #f1f1f1;
+	padding: 30px;
+}
+.navbar{
+	font-size: 1.4rem;
+}
+.navbar-brand{
+	font-size: 1.4rem;
+}
