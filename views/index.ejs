@@ -18,7 +18,15 @@
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
 					<li class="nav-item"><a class="nav-link">Contact Us</a></li>
+				</ul>
+				<ul class="navbar-nav">
+					<%if(user){%>
+					<li class="nav-item"><a class="nav-link" href="/user"><%=user.username%></a></li>
+					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+
+					<%}else{%>
 					<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+					<%};%>
 				</ul>
 			</div>
 		</nav>

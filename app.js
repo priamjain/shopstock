@@ -36,12 +36,13 @@ passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//=============
+//=============================
 //ROUTES
-//=============
+//=============================
 
 app.get("/",function(req,res){
-	res.render("index");
+
+	res.render("index",{user:req.user});
 
 });
 
@@ -50,20 +51,29 @@ app.get("/login",function(req,res){
 });
 
 app.post("/register",function(req,res){
-	console.log("rec");
+
 	User.register(new User({username:req.body.username,email:req.body.email}),req.body.password,function(err,user){
+
 		if(err)
 		{
 			console.log(err);
 			return res.redirect("/login");
 		}
-		passport.authenticate('local', { successRedirect: '/',
-			failureRedirect: '/login',
-			failureFlash: true })
+
+        passport.authenticate('local')(req, res, function () {
+          res.redirect('/');
+        });
 	});
 });
 
+app.post("/login",passport.authenticate("local",{successRedirect: '/',
+                                   failureRedirect: '/login'}));
 
+app.get("/logout",function(req,res){
+	req.logout();
+    res.redirect('/');
+
+});
 app.listen(3000,function(){
 	console.log("Server Started");
 });
