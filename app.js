@@ -4,7 +4,7 @@ expressSession = require("express-session"),
 mongoose = require("mongoose");
 bodyParser = require("body-parser"),
 User = require('./models/user'),
-Bussiness = require("./models/bussiness"),
+Business = require("./models/business"),
 LocalStrategy = require("passport-local"),
 searchable = require('mongoose-regex-search'),
 passport = require("passport");
@@ -49,25 +49,25 @@ app.get("/",function(req,res){
 
 });
 
-app.get("/bussiness",function(req,res){
-	res.locals.page="bussiness";
-	Bussiness.search(req.query.q).populate('owner').exec(function(err,bussiness){
-		res.render("bussiness",{user:req.user,bussiness:bussiness});
+app.get("/business",function(req,res){
+	res.locals.page="business";
+	Business.search(req.query.q).populate('owner').exec(function(err,business){
+		res.render("business",{user:req.user,business:business});
 	});
 });
 
-app.post("/bussiness",isLoggedIn,function(req,res){
+app.post("/business",isLoggedIn,function(req,res){
 	req.body.days = JSON.parse(req.body.days);
 	req.body.owner = req.user._id;
 	// console.log(req.body);
-	var bussiness = new Bussiness(req.body);
-	bussiness.save();
-	res.redirect("/bussiness/new");
+	var business = new Business(req.body);
+	business.save();
+	res.redirect("/business/new");
 });
 //
-app.get("/bussiness/new",isLoggedIn,function(req,res){
-	res.locals.page = "newBussiness";
-	res.render("newBussiness",{user:req.user});
+app.get("/business/new",isLoggedIn,function(req,res){
+	res.locals.page = "newBusiness";
+	res.render("newBusiness",{user:req.user});
 });
 
 app.get("/login",function(req,res,next){
@@ -109,13 +109,13 @@ app.get("/logout",function(req,res){
 });
 
 
-// app.listen(3000,function(){
-// 	console.log("Server Started");
-// });
-
-app.listen(process.env.PORT||8000,process.env.IP,function(){
+app.listen(3000,function(){
 	console.log("Server Started");
 });
+
+// app.listen(process.env.PORT||8000,process.env.IP,function(){
+// 	console.log("Server Started");
+// });
 
 function isLoggedIn(req,res,next){
 	if(req.isAuthenticated()){

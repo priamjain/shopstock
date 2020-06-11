@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
 	lastname:String,
 	email:String,
 	password:String,
-	bussiness:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Bussiness' }]
+	business:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Business' }]
 });
  
 userSchema.plugin(passportLocalMongoose,{usernameField:"email"});
