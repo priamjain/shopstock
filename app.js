@@ -55,7 +55,12 @@ app.get("/",function(req,res){
 
 });
 
-app.get("/bussiness/new",isLoggedIn,function(req,res){
+app.post("/bussiness",function(req,res){
+	console.log(req.body);
+	res.redirect("/bussiness/new");
+});
+//,isLoggedIn
+app.get("/bussiness/new",function(req,res){
 	res.locals.page = "newBussiness";
 	res.render("newBussiness",{user:req.user});
 });
@@ -78,7 +83,7 @@ app.post("/register",function(req,res){
 
 		if(err)
 		{
-			return res.redirect("/login?info=err");
+			return res.redirect("/login?info=regerr");
 		}
 
         passport.authenticate('local')(req, res, function () {
@@ -88,7 +93,7 @@ app.post("/register",function(req,res){
 });
 
 app.post("/login",passport.authenticate("local",{successRedirect: '/',
-                                   failureRedirect: '/login'}),function(err,user){
+                                   failureRedirect: '/login?info=logerr'}),function(err,user){
 	console.log(err);
 });
 

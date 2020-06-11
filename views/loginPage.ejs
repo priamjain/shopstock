@@ -2,11 +2,18 @@
 </nav>
 <div id="loginform" class="container border rounded border-info w-50">
 	<div class="loginheader container-fluid d-flex justify-content-center">
-		<a class="btn <%if(!info){%>text-success bor-bot<%}%>">Login</a>
-		<a class="btn <%if(info){%>text-success bor-bot<%}%>">SignUp</a>
+		<a class="btn <%if(info=="logerr" || !info){%>text-success bor-bot<%}%>">Login</a>
+		<a class="btn <%if(info=="regerr"){%>text-success bor-bot<%}%>">SignUp</a>
 	</div>
-	<div id="ologin" class="container <%if(info){%>d-none<%}%>">
+	<div id="ologin" class="container <%if(info=="regerr"){%>d-none<%}%>">
 		<div id="login" class="container rounded">
+			<%if(info=="logerr"){%>
+			<div class="card m-4 bg-info text-light p-0">
+				<div class="card-header">
+					Incorrect ID/Password
+				</div>
+			</div>
+			<%};%>
 			<form action="/login" method="POST">
 				<div class="form-group">
 					<label for="loginemail">Email</label>
@@ -22,9 +29,9 @@
 	</div>
 
 
-	<div id="osignup" class="container <%if(!info){%>d-none<%}%>">
+	<div id="osignup" class="container <%if(info=="logerr" || !info){%>d-none<%}%>">
 		<div id="signup" class="container rounded">
-			<%if(info){%>
+			<%if(info=="regerr"){%>
 			<div class="card m-4 bg-info text-light p-0">
 				<div class="card-header">
 					Email Already Exists
