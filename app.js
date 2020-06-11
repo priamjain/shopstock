@@ -56,6 +56,15 @@ app.get("/",function(req,res){
 
 });
 
+app.get("/bussiness",function(req,res){
+	res.locals.page="bussiness"
+	Bussiness.find({'name':req.query.q}).populate('owner').exec(function(err,bussiness){
+		res.render("bussiness",{user:req.user,bussiness:bussiness});
+	});
+
+
+});
+
 app.post("/bussiness",isLoggedIn,function(req,res){
 	req.body.days = JSON.parse(req.body.days);
 	req.body.owner = req.user._id;
