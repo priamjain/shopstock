@@ -109,13 +109,13 @@ app.get("/logout",function(req,res){
 });
 
 
-app.listen(3000,function(){
-	console.log("Server Started");
-});
-
-// app.listen(process.env.PORT||8000,process.env.IP,function(){
+// app.listen(3000,function(){
 // 	console.log("Server Started");
 // });
+
+app.listen(process.env.PORT||8000,process.env.IP,function(){
+	console.log("Server Started");
+});
 
 function isLoggedIn(req,res,next){
 	if(req.isAuthenticated()){
