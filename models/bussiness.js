@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
  
 const bussinessSchema = new mongoose.Schema({
+	owner:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	name:String,
 	address:String,
 	landmark:String,
@@ -11,12 +11,11 @@ const bussinessSchema = new mongoose.Schema({
 		MON:Boolean,
 		TUE:Boolean,
 		WED:Boolean,
-		THY:Boolean,
+		THU:Boolean,
 		FRI:Boolean,
 		SAT:Boolean
 	}
 });
  
-userSchema.plugin(passportLocalMongoose,{usernameField:"email"});
  
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Bussiness', bussinessSchema);

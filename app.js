@@ -4,6 +4,7 @@ expressSession = require("express-session"),
 mongoose = require("mongoose");
 bodyParser = require("body-parser"),
 User = require('./models/user'),
+Bussiness = require("./models/bussiness"),
 LocalStrategy = require("passport-local"),
 passport = require("passport");
 
@@ -55,12 +56,16 @@ app.get("/",function(req,res){
 
 });
 
-app.post("/bussiness",function(req,res){
+app.post("/bussiness",isLoggedIn,function(req,res){
+	req.body.days = JSON.parse(req.body.days);
+	req.body.owner = req.user._id;
 	console.log(req.body);
+	var bussiness = new Bussiness(req.body);
+	bussiness.save();
 	res.redirect("/bussiness/new");
 });
-//,isLoggedIn
-app.get("/bussiness/new",function(req,res){
+//
+app.get("/bussiness/new",isLoggedIn,function(req,res){
 	res.locals.page = "newBussiness";
 	res.render("newBussiness",{user:req.user});
 });

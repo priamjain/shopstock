@@ -6,7 +6,7 @@ var days = {
 	WED:false,
 	THU:false,
 	FRI:false,
-	Sat:false
+	SAT:false
 }
 
 $("#days").val(JSON.stringify(days));
