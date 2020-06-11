@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
- 
+const searchable = require('mongoose-regex-search'); 
 const bussinessSchema = new mongoose.Schema({
 	owner:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	name:String,
+	name:{type:String,searchable:true},
 	address:String,
 	landmark:String,
 	pincode:String,
@@ -16,6 +16,7 @@ const bussinessSchema = new mongoose.Schema({
 		SAT:Boolean
 	}
 });
+bussinessSchema.plugin(searchable);
  
  
 module.exports = mongoose.model('Bussiness', bussinessSchema);

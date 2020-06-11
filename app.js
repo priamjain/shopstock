@@ -6,6 +6,7 @@ bodyParser = require("body-parser"),
 User = require('./models/user'),
 Bussiness = require("./models/bussiness"),
 LocalStrategy = require("passport-local"),
+searchable = require('mongoose-regex-search'),
 passport = require("passport");
 
 
@@ -38,6 +39,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+//=====================
+//ROUTES
+//=====================
 
 app.get("/",function(req,res){
 	res.locals.page="index";
@@ -46,12 +50,10 @@ app.get("/",function(req,res){
 });
 
 app.get("/bussiness",function(req,res){
-	res.locals.page="bussiness"
-	Bussiness.find({'name':req.query.q}).populate('owner').exec(function(err,bussiness){
+	res.locals.page="bussiness";
+	Bussiness.search(req.query.q).populate('owner').exec(function(err,bussiness){
 		res.render("bussiness",{user:req.user,bussiness:bussiness});
 	});
-
-
 });
 
 app.post("/bussiness",isLoggedIn,function(req,res){
@@ -82,7 +84,7 @@ app.get("/login",function(req,res,next){
 
 app.post("/register",function(req,res){
 
-	User.register(new User({username:req.body.username,email:req.body.email}),req.body.password,function(err,user){
+	User.register(new User({firstname:req.body.firstname,lastname:req.body.lastname,email:req.body.email}),req.body.password,function(err,user){
 
 		if(err)
 		{
@@ -105,9 +107,14 @@ app.get("/logout",function(req,res){
     res.redirect('/');
 
 });
-app.listen(process.env.PORT||8000,process.env.IP,function(){
+
+
+app.listen(3000,function(){
 	console.log("Server Started");
 });
+// app.listen(process.env.PORT||8000,process.env.IP,function(){
+// 	console.log("Server Started");
+// });
 
 function isLoggedIn(req,res,next){
 	if(req.isAuthenticated()){
