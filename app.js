@@ -105,7 +105,7 @@ app.get("/logout",function(req,res){
     res.redirect('/');
 
 });
-app.listen(3000,function(){
+app.listen(process.env.port||8000,process.env.IP,function(){
 	console.log("Server Started");
 });
 
