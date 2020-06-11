@@ -37,18 +37,7 @@ passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// passport.use(new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: 'password'
-//   },
-//   function(username, password, done) {
 
-//   }
-// ));
-
-//=============================
-//ROUTES
-//=============================
 
 app.get("/",function(req,res){
 	res.locals.page="index";
@@ -68,7 +57,7 @@ app.get("/bussiness",function(req,res){
 app.post("/bussiness",isLoggedIn,function(req,res){
 	req.body.days = JSON.parse(req.body.days);
 	req.body.owner = req.user._id;
-	console.log(req.body);
+	// console.log(req.body);
 	var bussiness = new Bussiness(req.body);
 	bussiness.save();
 	res.redirect("/bussiness/new");

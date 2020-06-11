@@ -20,6 +20,18 @@ $(function(){
 		});
 	});
 
+$(".pass").change(function() {
+	if($("#conpass").val()!==$("#signuppass").val()){
+		$("#conpass").addClass('box-wrong');
+		$("#wrongpass").removeClass('d-none');
+
+	}
+	else{
+		$("#wrongpass").addClass('d-none');
+		$("#conpass").removeClass('box-wrong');
+	}
+	
+});
 
 // for(var i=0;i<btns.length;i++)
 // {

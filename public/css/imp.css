@@ -1,0 +1,38 @@
+body{
+	font-family: "serif";
+	background-color: #99badd;
+}
+
+#q{
+	color: #f1f1f1;
+	transition: none;
+	background-color: transparent;
+	outline: none;
+	border:0;
+	border-bottom: 1px solid #ced4da;
+}
+#q:focus
+{
+	box-shadow: none;
+	background-color: transparent;
+	outline: none;
+}
+
+nav button:focus{
+	outline: none;
+}
+
+.navbar-brand{
+	font-size: 1.4rem;
+}
+#maintop{
+	background-image: url("main4.jpg");
+	background-repeat: no-repeat;
+	background-position: 0 8%;
+	background-size: cover;
+	width: 100%;
+	height: 400px;
+	font-size: 1.4rem;
+	object-fit: contain;
+}
+
