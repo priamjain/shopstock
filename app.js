@@ -19,7 +19,7 @@ app.use(expressSession({
 //Connect Mongo and USES
 //==========================
 
-mongoose.connect('mongodb+srv://hello:123456@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect('mongodb+srv://hello:v0sbEFcFwOjHoqpF@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -35,6 +35,15 @@ app.use(passport.session());
 passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// passport.use(new LocalStrategy({
+//     usernameField: 'email',
+//     passwordField: 'password'
+//   },
+//   function(username, password, done) {
+
+//   }
+// ));
 
 //=============================
 //ROUTES
@@ -60,7 +69,7 @@ app.get("/login",function(req,res,next){
 		return next();
 	};
 	},function(req,res){
-	res.render("loginPage",{user:req.user});
+	res.render("loginPage",{user:req.user,info:req.query.info});
 });
 
 app.post("/register",function(req,res){
@@ -69,8 +78,7 @@ app.post("/register",function(req,res){
 
 		if(err)
 		{
-			console.log(err);
-			return res.redirect("/login");
+			return res.redirect("/login?info=err");
 		}
 
         passport.authenticate('local')(req, res, function () {
@@ -80,7 +88,9 @@ app.post("/register",function(req,res){
 });
 
 app.post("/login",passport.authenticate("local",{successRedirect: '/',
-                                   failureRedirect: '/login'}));
+                                   failureRedirect: '/login'}),function(err,user){
+	console.log(err);
+});
 
 app.get("/logout",function(req,res){
 	req.logout();

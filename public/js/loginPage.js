@@ -3,6 +3,7 @@ var signupBox = $("#osignup");
 var loginBox = $("#ologin");
 // console.log(btns);
 
+
 $(function(){
 		btns.click(function(){
 			signupBox.addClass('d-none');
