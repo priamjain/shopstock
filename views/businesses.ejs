@@ -1,0 +1,21 @@
+<%-include("./partials/header")	%>
+
+<div class="container row">
+	<%businesses.forEach(function(business){ %>
+	
+	<div class="card col-md-4 m-3" style="width: 18rem;">
+		<div class="card-header">
+			<%=business.name%>
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Address: <%=business.address%></h5>
+			<h6 class="card-subtitle mb-2 text-muted">Area: <%=business.landmark%>, <%=business.pincode%></h6>
+			<p class="card-text"><%=business.days%></p>
+			<a href="#" class="card-link"><%=business.owner.username%></a>
+			<a href="#" class="card-link"><%=business.owner.email%></a>
+			<a href="/business/<%=business._id%>/order/new" class="btn btn-primary">Place order</a>
+		</div>
+	</div>
+	<%});%>
+</div>
+<%-include("./partials/footer")%>

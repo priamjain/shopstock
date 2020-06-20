@@ -1,10 +1,9 @@
 <%-include("./partials/header")%>
 
 
-<div id="shopform" class="container w-50 rounded">
-	<form action="/order" method="POST">
+<div id="orderform" class="container w-50 rounded">
+	<form action="/business/<%=forBusiness%>/order" method="POST">
 		<div class="form-group">
-			<input type="hidden" id="for" name="forBusiness" value="<%=forBusiness%>">
 			<label for="content">Shop Name</label>
 			<textarea type="text" class="form-control" id="content" name="content"placeholder="Conents"></textarea>
 		</div>

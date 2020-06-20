@@ -4,9 +4,9 @@ body{
 }
 
 #q{
-	color: #f1f1f1;
+/*	color: #f1f1f1;*/
 	transition: none;
-	background-color: transparent;
+/*	background-color: transparent;*/
 	outline: none;
 	border:0;
 	border-bottom: 1px solid #ced4da;
@@ -14,7 +14,7 @@ body{
 #q:focus
 {
 	box-shadow: none;
-	background-color: transparent;
+/*	background-color: transparent;*/
 	outline: none;
 }
 
@@ -25,7 +25,7 @@ nav button:focus{
 .navbar-brand{
 	font-size: 1.4rem;
 }
-#maintop{
+#indexMainTop{
 	background-image: url("main4.jpg");
 	background-repeat: no-repeat;
 	background-position: 0 8%;

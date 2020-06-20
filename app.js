@@ -11,16 +11,15 @@ passport = require("passport"),
 Order = require("./models/orders")
 
 
+//==============================================================================================================================
+//Connect Mongo and USES
+//==============================================================================================================================
+
 app.use(expressSession({
 	secret : "YoLo",
 	resave:false,
 	saveUninitialized:false
 }));
-
-
-//==========================
-//Connect Mongo and USES
-//==========================
 
 mongoose.connect('mongodb+srv://hello:v0sbEFcFwOjHoqpF@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 var db = mongoose.connection;
@@ -40,9 +39,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-//=====================
+//====================================================================================================================
 //GET ROUTES
-//=====================
+//====================================================================================================================
 
 app.get("/",function(req,res){
 	res.locals.page="index";
@@ -51,9 +50,9 @@ app.get("/",function(req,res){
 });
 
 app.get("/business",function(req,res){
-	res.locals.page="business";
-	Business.search(req.query.q).populate('owner').exec(function(err,business){
-		res.render("business",{user:req.user,business:business});
+	res.locals.page="businesses";
+	Business.search(req.query.q).populate('owner').exec(function(err,businesses){
+		res.render("businesses",{user:req.user,businesses:businesses});
 	});
 });
 
@@ -62,16 +61,16 @@ app.get("/business/new",isLoggedIn,function(req,res){
 	res.render("newBusiness",{user:req.user});
 });
 
+app.get("/business/:businessId/order/new",isLoggedIn,(req,res)=>{
+	res.locals.page = "newOrders";
+	res.render("newOrder",{user:req.user,forBusiness:req.params.businessId});
+});
+
 app.get("/orders",isLoggedIn,function(req,res){
 	res.locals.page = "orders";
 	Order.find({byUser:req.user._id},(err,orders)=>{
 		res.render('orders',{user:req.user,orders:orders});
 	});
-});
-
-app.get("/order/new",isLoggedIn,(req,res)=>{
-	res.locals.page = "newOrders";
-	res.render("newOrder",{user:req.user,forBusiness:req.query.bsn});
 });
 
 app.get("/login",function(req,res,next){
@@ -91,13 +90,15 @@ app.get("/logout",function(req,res){
     res.redirect('/');
 
 });
-//============
+
+//============================================================================================================================
 //POST ROUTES
-//============
+//============================================================================================================================
 
 
-app.post('/order',isLoggedIn,(req,res)=>{
+app.post('/business/:businessId/order',isLoggedIn,(req,res)=>{
 	req.body.byUser = req.user._id;
+	req.body.forBusiness=req.params.businessId;
 	var order = new Order(req.body);
 	User.findOneAndUpdate({_id:req.user._id},{$push:{"orders":order}},{new:true},(err,user)=>{
 		if(err){
