@@ -1,6 +1,7 @@
 <%-include('./partials/header')%>
 
-<div class="container row">
+<div class="container">
+	<div class="row">
 	<%orders.forEach(function(order){ %>
 	
 	<div class="card col-md-4 m-3" style="width: 18rem;">
@@ -15,6 +16,7 @@
 		</div>
 	</div>
 	<%});%>
+	</div>
 </div>
 
 <%-include('./partials/footer')%>

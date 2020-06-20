@@ -1,18 +1,45 @@
 
-	<%-include("./partials/header")%>
-	<div class="container">
-		<div class="card text-center m-5">
-			<div class="card-header">
-				Add Your Business to the website.
+<%-include("./partials/header")%>
+<div class="container">
+	<%if(!user){%>
+	<div class="card text-center m-5">
+		<div class="card-header">
+			Add Your Business to the website.
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Parlour? Bakery? Karyana?</h5>
+			<a href="/Business/new" class="btn btn-success btn-lg">Add Your Business</a>
+		</div>
+		<div class="card-footer text-muted">
+			Get More Autdience for your business.
+		</div>
+	</div>
+	<%}else{%>
+	<div class="container mt-4 mb-4">
+	<a href="/Business/new" class="btn btn-success btn-lg w-100">Add New Business</a>
+	</div>
+		<div id="accordion mt-0">
+		<%user.businesses.forEach((bus)=>{%>
+			<div class="card ">
+				<div class="card-header p-0" id="<%=bus._id%>">
+						<button class="btn w-100" data-toggle="collapse" data-target="#<%=bus._id%>con" aria-expanded="true" aria-controls="<%=bus._id%>con">
+							<%=bus.name%>
+						<span class="badge badge-primary badge-pill"><%=bus.orders.length%></span>
+						</button>
+				</div>
+
+				<div id="<%=bus._id%>con" class="collapse show" aria-labelledby="<%=bus._id%>" data-parent="#accordion">
+					<div class="card-body">
+						<ul class="list-group">
+							<%bus.orders.forEach((order)=>{%>
+							<li class="list-group-item"><a href=""><%=order.content%></a></li>
+							<%});%>
+						</ul>
+					</div>
+				</div>
 			</div>
-			<div class="card-body">
-				<h5 class="card-title">Parlour? Bakery? Karyana?</h5>
-				<a href="/Business/new" class="btn btn-success btn-lg">Add Your Business</a>
-			</div>
-			<div class="card-footer text-muted">
-				Get More Autdience for your business.
-			</div>
+		<%})};%>
 		</div>
 	</div>
 
-<%-include("./partials/footer")%>
+	<%-include("./partials/footer")%>

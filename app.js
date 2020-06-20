@@ -43,20 +43,26 @@ passport.deserializeUser(User.deserializeUser());
 //GET ROUTES
 //====================================================================================================================
 
-app.get("/",function(req,res){
+app.get("/",(req,res)=>{
 	res.locals.page="index";
-	res.render("index",{user:req.user});
-
+	if(req.user) {
+			User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'orders',model:'Order'}}).exec((err,user)=>{
+			res.render("index",{user:user});
+	});
+	} 
+	else {
+		res.render("index",{user:req.user});
+	}
 });
 
-app.get("/business",function(req,res){
+app.get("/business",(req,res)=>{
 	res.locals.page="businesses";
-	Business.search(req.query.q).populate('owner').exec(function(err,businesses){
+	Business.search(req.query.q).populate('owner').exec((err,businesses)=>{
 		res.render("businesses",{user:req.user,businesses:businesses});
 	});
 });
 
-app.get("/business/new",isLoggedIn,function(req,res){
+app.get("/business/new",isLoggedIn,(req,res)=>{
 	res.locals.page = "newBusiness";
 	res.render("newBusiness",{user:req.user});
 });
@@ -119,7 +125,6 @@ app.post("/business",isLoggedIn,function(req,res){
 	// console.log(req.body);
 	var business = new Business(req.body);
 	User.findOneAndUpdate({_id:req.user._id},{$push:{"businesses":business._id}},{new:true},(err,user)=>{
-		console.log(user);
 		business.save();
 	});
 	res.redirect("/business/new");

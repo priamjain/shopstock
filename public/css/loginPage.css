@@ -1,12 +1,12 @@
 
-input.form-control:focus
+#loginform input.form-control:focus
 {
 	box-shadow: none;
 	background-color: transparent;
 	outline: none;
 }
 
-.form-control{
+#loginform .form-control{
 	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 	transition: none;
 	background-color: transparent;
