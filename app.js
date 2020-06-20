@@ -99,6 +99,16 @@ app.get("/logout",function(req,res){
 app.post('/order',isLoggedIn,(req,res)=>{
 	req.body.byUser = req.user._id;
 	var order = new Order(req.body);
+	User.findOneAndUpdate({_id:req.user._id},{$push:{"orders":order}},{new:true},(err,user)=>{
+		if(err){
+			return res.send("Error finding User");
+		}
+		Business.findOneAndUpdate({_id:req.body.forBusiness},{$push:{"orders":order}},(error,business)=>{
+			if(error){
+				return res.send("Error finding bussiness");
+			};
+		});
+	});
 	order.save();
 	res.redirect("/orders");
 });
@@ -107,7 +117,10 @@ app.post("/business",isLoggedIn,function(req,res){
 	req.body.owner = req.user._id;
 	// console.log(req.body);
 	var business = new Business(req.body);
-	business.save();
+	User.findOneAndUpdate({_id:req.user._id},{$push:{"businesses":business._id}},{new:true},(err,user)=>{
+		console.log(user);
+		business.save();
+	});
 	res.redirect("/business/new");
 });
 //
