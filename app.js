@@ -7,7 +7,8 @@ User = require('./models/user'),
 Business = require("./models/business"),
 LocalStrategy = require("passport-local"),
 searchable = require('mongoose-regex-search'),
-passport = require("passport");
+passport = require("passport"),
+Order = require("./models/orders")
 
 
 app.use(expressSession({
@@ -40,7 +41,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 //=====================
-//ROUTES
+//GET ROUTES
 //=====================
 
 app.get("/",function(req,res){
@@ -56,18 +57,16 @@ app.get("/business",function(req,res){
 	});
 });
 
-app.post("/business",isLoggedIn,function(req,res){
-	req.body.days = JSON.parse(req.body.days);
-	req.body.owner = req.user._id;
-	// console.log(req.body);
-	var business = new Business(req.body);
-	business.save();
-	res.redirect("/business/new");
-});
-//
 app.get("/business/new",isLoggedIn,function(req,res){
 	res.locals.page = "newBusiness";
 	res.render("newBusiness",{user:req.user});
+});
+
+app.get("/orders",isLoggedIn,function(req,res){
+	res.locals.page = "orders";
+	Order.find({by:req.user._id},(err,orders)=>{
+		res.render('searchOrders',{user:req.user,orders:orders});
+	});
 });
 
 app.get("/login",function(req,res,next){
@@ -81,6 +80,25 @@ app.get("/login",function(req,res,next){
 	},function(req,res){
 	res.render("loginPage",{user:req.user,info:req.query.info});
 });
+
+app.get("/logout",function(req,res){
+	req.logout();
+    res.redirect('/');
+
+});
+//============
+//POST ROUTES
+//============
+
+app.post("/business",isLoggedIn,function(req,res){
+	req.body.days = JSON.parse(req.body.days);
+	req.body.owner = req.user._id;
+	// console.log(req.body);
+	var business = new Business(req.body);
+	business.save();
+	res.redirect("/business/new");
+});
+//
 
 app.post("/register",function(req,res){
 
@@ -102,20 +120,23 @@ app.post("/login",passport.authenticate("local",{successRedirect: '/',
 	console.log(err);
 });
 
-app.get("/logout",function(req,res){
-	req.logout();
-    res.redirect('/');
 
+//============
+//LISTEN
+//============
+
+app.listen(3000,function(){
+	console.log("Server Started");
 });
 
-
-// app.listen(3000,function(){
+// app.listen(process.env.PORT||8000,process.env.IP,function(){
 // 	console.log("Server Started");
 // });
 
-app.listen(process.env.PORT||8000,process.env.IP,function(){
-	console.log("Server Started");
-});
+
+//==============
+//Functions
+//==============
 
 function isLoggedIn(req,res,next){
 	if(req.isAuthenticated()){

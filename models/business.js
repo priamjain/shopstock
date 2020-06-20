@@ -14,7 +14,8 @@ const businessSchema = new mongoose.Schema({
 		THU:Boolean,
 		FRI:Boolean,
 		SAT:Boolean
-	}
+	},
+	orders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}]
 });
 businessSchema.plugin(searchable);
  

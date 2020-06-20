@@ -1,0 +1,20 @@
+<%-include('./partials/header')%>
+
+<div class="container row">
+	<%orders.forEach(function(order){ %>
+	
+	<div class="card col-md-4 m-3" style="width: 18rem;">
+		<div class="card-header">
+			<%=order.title%>
+		</div>
+		<div class="card-body">
+			<h5 class="card-title">Address: <%=order.title%></h5>
+			<h6 class="card-subtitle mb-2 text-muted">Area: <%=order.by%></h6>
+			<p class="card-text"><%=order.for%></p>
+			<a href="#" class="card-link"><%=order.owner.title%></a>
+		</div>
+	</div>
+	<%});%>
+</div>
+
+<%-include('./partials/footer')%>
