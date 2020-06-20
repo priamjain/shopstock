@@ -1,0 +1,15 @@
+<%-include("./partials/header")%>
+
+
+<div id="shopform" class="container w-50 rounded">
+	<form action="/order" method="POST">
+		<div class="form-group">
+			<label for="content">Shop Name</label>
+			<textarea type="text" class="form-control" id="content" name="name"placeholder="Conents"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary w-25">SUBMIT</button>
+	</form>	
+</div>
+
+
+<%-include("./partials/footer")%>

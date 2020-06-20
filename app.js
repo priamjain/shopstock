@@ -65,8 +65,13 @@ app.get("/business/new",isLoggedIn,function(req,res){
 app.get("/orders",isLoggedIn,function(req,res){
 	res.locals.page = "orders";
 	Order.find({by:req.user._id},(err,orders)=>{
-		res.render('searchOrders',{user:req.user,orders:orders});
+		res.render('orders',{user:req.user,orders:orders});
 	});
+});
+
+app.get("/order/new",isLoggedIn,(req,res)=>{
+	res.locals.page = "newOrders";
+	res.render("newOrder",{user:req.user});
 });
 
 app.get("/login",function(req,res,next){
@@ -90,6 +95,11 @@ app.get("/logout",function(req,res){
 //POST ROUTES
 //============
 
+
+app.post('/order',isLoggedIn,(req,res)=>{
+	req.body.by = req.user._id;
+	var order = new Order(req.body);
+});
 app.post("/business",isLoggedIn,function(req,res){
 	req.body.days = JSON.parse(req.body.days);
 	req.body.owner = req.user._id;

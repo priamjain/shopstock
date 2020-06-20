@@ -5,13 +5,13 @@
 	
 	<div class="card col-md-4 m-3" style="width: 18rem;">
 		<div class="card-header">
-			<%=order.title%>
+			<%=order.content%>
 		</div>
 		<div class="card-body">
-			<h5 class="card-title">Address: <%=order.title%></h5>
-			<h6 class="card-subtitle mb-2 text-muted">Area: <%=order.by%></h6>
-			<p class="card-text"><%=order.for%></p>
-			<a href="#" class="card-link"><%=order.owner.title%></a>
+			<h5 class="card-title">Address: <%=order.content%></h5>
+			<h6 class="card-subtitle mb-2 text-muted">Area: <%=order.byUser%></h6>
+			<p class="card-text"><%=order.forBusiness%></p>
+			<a href="#" class="card-link"><%=order.owner.content%></a>
 		</div>
 	</div>
 	<%});%>

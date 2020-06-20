@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
-	by:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
-	contents: 'String',
-	for:{type:mongoose.Schema.Types.ObjectId,ref:'Bussiness'}
+	byUser:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
+	content: 'String',
+	forBusiness:{type:mongoose.Schema.Types.ObjectId,ref:'Business'}
 });
 
 module.exports = mongoose.model('Order', orderSchema);
