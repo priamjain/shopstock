@@ -156,13 +156,13 @@ app.post("/login",passport.authenticate("local",{successRedirect: '/',
 //LISTEN
 //============
 
-app.listen(3000,function(){
-	console.log("Server Started");
-});
-
-// app.listen(process.env.PORT||8000,process.env.IP,function(){
+// app.listen(3000,function(){
 // 	console.log("Server Started");
 // });
+
+app.listen(process.env.PORT||8000,process.env.IP,function(){
+	console.log("Server Started");
+});
 
 
 //==============
