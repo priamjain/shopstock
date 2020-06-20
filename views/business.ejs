@@ -13,6 +13,7 @@
 			<p class="card-text"><%=bus.days%></p>
 			<a href="#" class="card-link"><%=bus.owner.username%></a>
 			<a href="#" class="card-link"><%=bus.owner.email%></a>
+			<a href="/order/new?bsn=<%=bus._id%>" class="btn btn-primary">Place order</a>
 		</div>
 	</div>
 	<%});%>

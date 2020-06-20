@@ -64,14 +64,14 @@ app.get("/business/new",isLoggedIn,function(req,res){
 
 app.get("/orders",isLoggedIn,function(req,res){
 	res.locals.page = "orders";
-	Order.find({by:req.user._id},(err,orders)=>{
+	Order.find({byUser:req.user._id},(err,orders)=>{
 		res.render('orders',{user:req.user,orders:orders});
 	});
 });
 
 app.get("/order/new",isLoggedIn,(req,res)=>{
 	res.locals.page = "newOrders";
-	res.render("newOrder",{user:req.user});
+	res.render("newOrder",{user:req.user,forBusiness:req.query.bsn});
 });
 
 app.get("/login",function(req,res,next){
@@ -97,8 +97,10 @@ app.get("/logout",function(req,res){
 
 
 app.post('/order',isLoggedIn,(req,res)=>{
-	req.body.by = req.user._id;
+	req.body.byUser = req.user._id;
 	var order = new Order(req.body);
+	order.save();
+	res.redirect("/orders");
 });
 app.post("/business",isLoggedIn,function(req,res){
 	req.body.days = JSON.parse(req.body.days);
