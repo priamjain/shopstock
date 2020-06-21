@@ -15,7 +15,8 @@ const businessSchema = new mongoose.Schema({
 		FRI:Boolean,
 		SAT:Boolean
 	},
-	orders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}]
+	completedOrders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}],
+	pendingOrders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}]
 });
 businessSchema.plugin(searchable);
  

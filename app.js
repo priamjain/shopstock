@@ -130,14 +130,15 @@ app.put("/business/:businessId/edit",isLoggedIn,(req,res)=>{
 
 
 app.post('/business/:businessId/order',isLoggedIn,(req,res)=>{
+	req.body.done = false;
 	req.body.byUser = req.user._id;
 	req.body.forBusiness=req.params.businessId;
 	var order = new Order(req.body);
-	User.findOneAndUpdate({_id:req.user._id},{$push:{"orders":order}},{new:true},(err,user)=>{
+	User.findOneAndUpdate({_id:req.user._id},{$push:{"pendingOrders":order}},{new:true},(err,user)=>{
 		if(err){
 			return res.send("Error finding User");
 		}
-		Business.findOneAndUpdate({_id:req.body.forBusiness},{$push:{"orders":order}},(error,business)=>{
+		Business.findOneAndUpdate({_id:req.body.forBusiness},{$push:{"pendingOrders":order}},(error,business)=>{
 			if(error){
 				return res.send("Error finding bussiness");
 			};
