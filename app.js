@@ -1,4 +1,4 @@
-var express = require("express"),
+const express = require("express"),
 app = express(),
 expressSession = require("express-session"),
 mongoose = require("mongoose");
@@ -8,12 +8,15 @@ Business = require("./models/business"),
 LocalStrategy = require("passport-local"),
 searchable = require('mongoose-regex-search'),
 passport = require("passport"),
-Order = require("./models/orders")
+Order = require("./models/orders"),
+methodOverride = require("method-override");
 
 
 //==============================================================================================================================
 //Connect Mongo and USES
 //==============================================================================================================================
+
+app.use(methodOverride('_method'));
 
 app.use(expressSession({
 	secret : "YoLo",
@@ -21,7 +24,7 @@ app.use(expressSession({
 	saveUninitialized:false
 }));
 
-mongoose.connect('mongodb+srv://hello:v0sbEFcFwOjHoqpF@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect('mongodb+srv://hello:v0sbEFcFwOjHoqpF@shops-trg7f.mongodb.net/shops?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true,useFindAndModify:false});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -46,9 +49,9 @@ passport.deserializeUser(User.deserializeUser());
 app.get("/",(req,res)=>{
 	res.locals.page="index";
 	if(req.user) {
-			User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'orders',model:'Order'}}).exec((err,user)=>{
+		User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'orders',model:'Order'}}).exec((err,user)=>{
 			res.render("index",{user:user});
-	});
+		});
 	} 
 	else {
 		res.render("index",{user:req.user});
@@ -72,6 +75,18 @@ app.get("/business/:businessId/order/new",isLoggedIn,(req,res)=>{
 	res.render("newOrder",{user:req.user,forBusiness:req.params.businessId});
 });
 
+app.get("/business/:businessId/edit",isLoggedIn,(req,res)=>{
+	Business.findOne({_id:req.params.businessId},(err,business)=>{
+		if(err){
+			console.log(err);
+			return res.redirect('/');
+		}
+		console.log(business);
+		res.locals.page = "editBusiness";
+		res.render("editBusiness",{user:req.user,business:business});
+	})
+});
+
 app.get("/orders",isLoggedIn,function(req,res){
 	res.locals.page = "orders";
 	Order.find({byUser:req.user._id},(err,orders)=>{
@@ -87,14 +102,26 @@ app.get("/login",function(req,res,next){
 	else{
 		return next();
 	};
-	},function(req,res){
+},function(req,res){
 	res.render("loginPage",{user:req.user,info:req.query.info});
 });
 
 app.get("/logout",function(req,res){
 	req.logout();
-    res.redirect('/');
+	res.redirect('/');
 
+});
+
+//===========================================================================================================================
+//PUT ROUTES
+//===========================================================================================================================
+
+app.put("/business/:businessId/edit",isLoggedIn,(req,res)=>{
+	req.body.days = JSON.parse(req.body.days);
+	Business.findOneAndUpdate({_id:req.params.businessId},{$set: req.body},{new:true},(err,bus)=>{
+		console.log(bus);
+		res.redirect("/");
+	})
 });
 
 //============================================================================================================================
@@ -140,21 +167,21 @@ app.post("/register",function(req,res){
 			return res.redirect("/login?info=regerr");
 		}
 
-        passport.authenticate('local')(req, res, function () {
-          res.redirect('/');
-        });
+		passport.authenticate('local')(req, res,  ()=> {
+			res.redirect('/');
+		});
 	});
 });
 
 app.post("/login",passport.authenticate("local",{successRedirect: '/',
-                                   failureRedirect: '/login?info=logerr'}),function(err,user){
+	failureRedirect: '/login?info=logerr'}),function(err,user){
 	console.log(err);
 });
 
 
-//============
+//=================================================================================================================
 //LISTEN
-//============
+//=================================================================================================================
 
 // app.listen(3000,function(){
 // 	console.log("Server Started");
@@ -165,9 +192,9 @@ app.listen(process.env.PORT||8000,process.env.IP,function(){
 });
 
 
-//==============
+//=================================================================================================================
 //Functions
-//==============
+//=================================================================================================================
 
 function isLoggedIn(req,res,next){
 	if(req.isAuthenticated()){
