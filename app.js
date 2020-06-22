@@ -49,7 +49,7 @@ passport.deserializeUser(User.deserializeUser());
 app.get("/",(req,res)=>{
 	res.locals.page="index";
 	if(req.user) {
-		User.findOne({_id:req.user.id}).populate([{path: 'businesses',populate:{path:'pendingOrders',model:'Order'},populate:{path:'completedOrders',model:'Order'}}]).exec((err,user)=>{
+		User.findOne({_id:req.user.id}).populate([{path: 'businesses', model:'Business',populate:[{path:'pendingOrders',model:'Order'},{path:'completedOrders',model:'Order'}]}]).exec((err,user)=>{
 			res.render("index",{user:user});
 		});
 	} 
@@ -139,6 +139,7 @@ app.put("/business/:businessId/edit",isLoggedIn,(req,res)=>{
 app.put("/order/:orderId/done",isLoggedIn,(req,res)=>{
 	let done=false;
 	if(req.body.done=='true'){
+		done=true;
 		Order.findOneAndUpdate({_id:req.params.orderId},{$set:{'done':done}},{new:true},(err,order)=>{
 			if(err){
 				console.log(err);
