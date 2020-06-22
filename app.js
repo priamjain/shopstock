@@ -49,7 +49,7 @@ passport.deserializeUser(User.deserializeUser());
 app.get("/",(req,res)=>{
 	res.locals.page="index";
 	if(req.user) {
-		User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'pendingOrders',model:'Order'},populate:{path:'completedOrders',model:'Order'}}).exec((err,user)=>{
+		User.findOne({_id:req.user.id}).populate([{path: 'businesses',populate:{path:'pendingOrders',model:'Order'},populate:{path:'completedOrders',model:'Order'}}]).exec((err,user)=>{
 			res.render("index",{user:user});
 		});
 	} 
