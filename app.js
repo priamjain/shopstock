@@ -49,7 +49,7 @@ passport.deserializeUser(User.deserializeUser());
 app.get("/",(req,res)=>{
 	res.locals.page="index";
 	if(req.user) {
-		User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'orders',model:'Order'}}).exec((err,user)=>{
+		User.findOne({_id:req.user.id}).populate({path: 'businesses',populate:{path:'pendingOrders',model:'Order'},populate:{path:'completedOrders',model:'Order'}}).exec((err,user)=>{
 			res.render("index",{user:user});
 		});
 	} 
@@ -87,10 +87,22 @@ app.get("/business/:businessId/edit",isLoggedIn,(req,res)=>{
 	})
 });
 
-app.get("/orders",isLoggedIn,function(req,res){
+app.get("/orders",isLoggedIn,(req,res)=>{
 	res.locals.page = "orders";
 	Order.find({byUser:req.user._id},(err,orders)=>{
 		res.render('orders',{user:req.user,orders:orders});
+	});
+});
+
+app.get("/order/:orderId",isLoggedIn,(req,res)=>{
+	res.locals.page = "order"
+	Order.findOne({_id:req.params.orderId},(err,order)=>{
+		if(err){
+			console.log(err);
+			return res.send(err);
+		}
+		// console.log(order);
+		res.render("order",{user:req.user,order:order});
 	});
 });
 
@@ -122,6 +134,41 @@ app.put("/business/:businessId/edit",isLoggedIn,(req,res)=>{
 		console.log(bus);
 		res.redirect("/");
 	})
+});
+
+app.put("/order/:orderId/done",isLoggedIn,(req,res)=>{
+	let done=false;
+	if(req.body.done=='true'){
+		Order.findOneAndUpdate({_id:req.params.orderId},{$set:{'done':done}},{new:true},(err,order)=>{
+			if(err){
+				console.log(err);
+				return res.redirect("/");
+			}
+
+		//
+		Business.findOneAndUpdate({_id:order.forBusiness},{$addToSet:{completedOrders:order},$pull:{'pendingOrders':order._id}},{new:true},(err,business)=>{
+			console.log(order);
+			console.log(business);
+		});
+	});
+	}
+	else{
+		Order.findOneAndUpdate({_id:req.params.orderId},{$set:{'done':done}},{new:true},(err,order)=>{
+			if(err){
+				console.log(err);
+				return res.redirect("/");
+			}
+
+		//
+		Business.findOneAndUpdate({_id:order.forBusiness},{$pull:{completedOrders:order._id},$addToSet:{'pendingOrders':order}},{new:true},(err,business)=>{
+			console.log(order);
+			console.log(business);
+		});
+	});
+	}
+
+
+	return res.redirect("/");
 });
 
 //============================================================================================================================
@@ -188,7 +235,7 @@ app.post("/login",passport.authenticate("local",{successRedirect: '/',
 // 	console.log("Server Started");
 // });
 
-app.listen(process.env.PORT||8000,process.env.IP,function(){
+app.listen(process.env.PORT||3000,process.env.IP,function(){
 	console.log("Server Started");
 });
 

@@ -25,7 +25,6 @@
 				<div class="card-header d-flex p-1" id="<%=bus._id%>">
 					<a class="btn w-100 text-left" data-toggle="collapse" data-target="#<%=bus._id%>con" aria-expanded="true" aria-controls="<%=bus._id%>con">
 						<%=bus.name%>
-						<span class="badge badge-primary badge-pill"><%=bus.orders.length%></span>
 					</a>
 					<a href="/business/<%=bus._id%>/edit" class="align-self-center mr-3">Edit</a>
 				</div>
@@ -33,11 +32,29 @@
 
 			<div id="<%=bus._id%>con" class="collapse show" aria-labelledby="<%=bus._id%>" data-parent="#accordion">
 				<div class="card-body">
-					<ul class="list-group">
-						<%bus.orders.forEach((order)=>{%>
-						<li class="list-group-item"><a href=""><%=order.content%></a></li>
-						<%});%>
-					</ul>
+
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link active" id="nav-Pending-tab" data-toggle="tab" href="#nav-Pending" role="tab" aria-controls="nav-Pending" aria-selected="true">Pending<span class="badge badge-primary badge-pill"><%=bus.pendingOrders.length%></span></a>
+							<a class="nav-item nav-link" id="nav-Completed-tab" data-toggle="tab" href="#nav-Completed" role="tab" aria-controls="nav-Completed" aria-selected="false">Completed<span class="badge badge-primary badge-pill"><%=bus.completedOrders.length%></span></a>
+						</div>
+					</nav>
+					<div class="tab-content" id="nav-tabContent">
+						<div class="tab-pane fade show active" id="nav-Pending" role="tabpanel" aria-labelledby="nav-Pending-tab">
+							<ul class="list-group">
+								<%bus.pendingOrders.forEach((order)=>{%>
+								<li class="list-group-item d-flex justify-content-between"><a href="/order/<%=order.id%>"><%=order.content%></a></li>
+								<%});%>
+							</ul>
+						</div>
+						<div class="tab-pane fade" id="nav-Completed" role="tabpanel" aria-labelledby="nav-Completed-tab">
+							<ul class="list-group">
+								<%bus.completedOrders.forEach((order)=>{%>
+								<li class="list-group-item d-flex justify-content-between"><a href="/order/<%=order.id%>"><%=order.content%></a></li>
+								<%});%>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

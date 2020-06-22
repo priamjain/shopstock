@@ -1,0 +1,22 @@
+<%-include('partials/header')%>
+
+
+<div class="container">
+	<a href="/" class="btn btn-primary">Back</a>
+	<h2>Order By: <%=order.byUser%></h2>
+	<p class="lead">Order: <%=order.content%></p>
+	<div class="d-flex justify-content-start">
+		<%if(order.done){%>
+	<form action="/order/<%=order._id%>/done?_method=PUT" method="POST">
+		<button type="submit" name="done" value="false">Mark as Incomplete</button>
+	</form>
+	<%}else{%>
+	<form action="/order/<%=order._id%>/done?_method=PUT" method="POST">
+		<button type="submit" name="done" value="true">Mark As Completed</button>
+	</form>
+	<%}%>
+	</div>
+</div>
+
+
+<%-include('partials/footer')%>
