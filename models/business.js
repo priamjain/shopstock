@@ -16,7 +16,8 @@ const businessSchema = new mongoose.Schema({
 		SAT:Boolean
 	},
 	completedOrders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}],
-	pendingOrders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}]
+	pendingOrders:[{type: mongoose.Schema.Types.ObjectId, ref:'Orders'}],
+	deleted:{type:Boolean,default:false}
 });
 businessSchema.plugin(searchable);
  

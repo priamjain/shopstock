@@ -50,7 +50,11 @@ app.get("/",(req,res)=>{
 	res.locals.page="index";
 	if(req.user) {
 		User.findOne({_id:req.user.id}).populate([{path: 'businesses', model:'Business',populate:[{path:'pendingOrders',model:'Order'},{path:'completedOrders',model:'Order'}]}]).exec((err,user)=>{
-			res.render("index",{user:user});
+			if(err){
+				console.log(err);
+			}
+			else{
+				res.render("index",{user:user});}
 		});
 	} 
 	else {
@@ -178,7 +182,6 @@ app.put("/order/:orderId/done",isLoggedIn,(req,res)=>{
 
 
 app.post('/business/:businessId/order',isLoggedIn,(req,res)=>{
-	req.body.done = false;
 	req.body.byUser = req.user._id;
 	req.body.forBusiness=req.params.businessId;
 	var order = new Order(req.body);
@@ -227,6 +230,17 @@ app.post("/login",passport.authenticate("local",{successRedirect: '/',
 	console.log(err);
 });
 
+//=================================================================================================================
+//DESTROY ROUTE
+//=================================================================================================================
+
+app.delete("/business/:businessId",isLoggedIn,(req,res)=>{
+	Business.findOneAndUpdate({_id:req.params.businessId},{deleted:true},{new:true},(err,business)=>{
+		res.redirect("/");
+
+	});
+});
+
 
 //=================================================================================================================
 //LISTEN
@@ -242,7 +256,7 @@ app.listen(process.env.PORT||3000,process.env.IP,function(){
 
 
 //=================================================================================================================
-//Functions
+//MIDDLEWARE
 //=================================================================================================================
 
 function isLoggedIn(req,res,next){

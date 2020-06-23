@@ -14,7 +14,10 @@ daysbtn.click(function(btn) {
 	$(this).toggleClass("btn-secondary btn-success");
 	if($(this).hasClass('btn-success')){
 		days[$(this).text()] = true;
-	};
+	}
+	else{
+		days[$(this).text()] = false;
+	}
 	$("#days").val(JSON.stringify(days));
 });
 
