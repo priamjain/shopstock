@@ -16,7 +16,8 @@
 	</div>
 	<%}else{%>
 	<div class="container mt-4 mb-4">
-		<a href="/Business/new" class="btn btn-success btn-lg w-100">Add New Business</a>
+		<a href="/Business/new" class="btn btn-success btn-lg">Add New Business</a>
+		<a href="/user/<%=user.id%>/deletedBusinesses" class="btn btn-success btn-lg">Deleted Business</a>
 	</div>
 	<div id="accordion mt-0">
 		<%user.businesses.forEach((bus)=>{if(!bus.deleted){%>

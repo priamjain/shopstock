@@ -73,6 +73,13 @@ app.get("/user/:userId/edit",isLoggedIn,(req,res)=>{
 	
 });
 
+app.get("/user/:userId/deletedBusinesses",isLoggedIn,(req,res)=>{
+	res.locals.page='deletedBusinesses';
+	User.findById(req.user.id,'businesses').populate('businesses').exec((err,user)=>{
+		res.render('deletedBusinesses',{user:user})
+	});
+});
+
 app.get("/business",(req,res)=>{
 	res.locals.page="businesses";
 	Business.search(req.query.q).populate('owner').exec((err,businesses)=>{
@@ -142,6 +149,13 @@ app.get("/logout",function(req,res){
 //===========================================================================================================================
 //PUT ROUTES
 //===========================================================================================================================
+
+app.put("/business/:businessId",isLoggedIn,(req,res)=>{
+	Business.findOneAndUpdate({_id:req.params.businessId},{deleted:false},{new:true},(err,business)=>{
+		res.redirect("/");
+
+	});
+});
 
 app.put("/user/:userId",isLoggedIn,(req,res)=>{
 	var userdata = req.body;
