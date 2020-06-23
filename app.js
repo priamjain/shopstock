@@ -62,6 +62,17 @@ app.get("/",(req,res)=>{
 	}
 });
 
+app.get("/user/:userId/edit",isLoggedIn,(req,res)=>{
+	res.locals.page='user';
+	User.findOne({_id:req.user.id},(err,user)=>{
+		if(err){
+			return console.log(err);
+		}
+		res.render('user',{user:user})	
+	})
+	
+});
+
 app.get("/business",(req,res)=>{
 	res.locals.page="businesses";
 	Business.search(req.query.q).populate('owner').exec((err,businesses)=>{
@@ -132,7 +143,18 @@ app.get("/logout",function(req,res){
 //PUT ROUTES
 //===========================================================================================================================
 
-app.put("/business/:businessId/edit",isLoggedIn,(req,res)=>{
+app.put("/user/:userId",isLoggedIn,(req,res)=>{
+	var userdata = req.body;
+	User.findByIdAndUpdate(req.params.userId,{firstname:userdata.firstname,lastname:userdata.lastname},{new:true,safe:true},(err,user)=>{
+		if(err){
+			return console.log(err);
+		}
+		console.log(userdata);
+		return res.redirect("/");
+	})
+});
+
+app.put("/business/:businessId",isLoggedIn,(req,res)=>{
 	req.body.days = JSON.parse(req.body.days);
 	Business.findOneAndUpdate({_id:req.params.businessId},{$set: req.body},{new:true},(err,bus)=>{
 		console.log(bus);
@@ -256,7 +278,7 @@ app.listen(process.env.PORT||3000,process.env.IP,function(){
 
 
 //=================================================================================================================
-//MIDDLEWARE
+//MIDDLEWAREs
 //=================================================================================================================
 
 function isLoggedIn(req,res,next){

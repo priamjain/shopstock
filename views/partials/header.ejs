@@ -24,8 +24,8 @@
 				<ul class="navbar-nav">
 					<%if(user){%>
 					<li class="nav-item"><a class="nav-link" href="/orders">Orders by You</a></li>
-					<li class="nav-item"><a class="nav-link" href="/user">Welcome! <%=user.firstname%></a></li>
-					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+					<li class="nav-item"><a class="nav-link" href="/user/<%=user._id%>/edit">Welcome! <%=user.firstname%></a></li>
+					<li class="nav-item"><a class="nav-link border border-info rounded" href="/logout">Logout</a></li>
 
 					<%}else{%>
 					<li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
