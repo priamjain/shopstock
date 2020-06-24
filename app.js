@@ -98,7 +98,7 @@ app.get("/business/:businessId/order/new",isLoggedIn,(req,res)=>{
 	res.render("newOrder",{forBusiness:req.params.businessId});
 });
 
-app.get("/business/:businessId/edit",isLoggedIn,(req,res)=>{
+app.get("/business/:businessId/edit",isLoggedIn,isAuthorizedForBus,(req,res)=>{
 	Business.findOne({_id:req.params.businessId},(err,business)=>{
 		if(err){
 			console.log(err);
@@ -117,7 +117,7 @@ app.get("/orders",isLoggedIn,(req,res)=>{
 	});
 });
 
-app.get("/order/:orderId",isLoggedIn,(req,res)=>{
+app.get("/order/:orderId",isLoggedIn,isAuthorizedForOrderFor,(req,res)=>{
 	res.locals.page = "order"
 	Order.findOne({_id:req.params.orderId},(err,order)=>{
 		if(err){
@@ -151,7 +151,7 @@ app.get("/logout",function(req,res){
 //PUT ROUTES
 //===========================================================================================================================
 
-app.put("/business/:businessId/undodelete",isLoggedIn,(req,res)=>{
+app.put("/business/:businessId/undodelete",isLoggedIn,isAuthorizedForBus,(req,res)=>{
 	Business.findOneAndUpdate({_id:req.params.businessId},{deleted:false},{new:true},(err,business)=>{
 		res.redirect("/");
 
@@ -169,7 +169,7 @@ app.put("/user/:userId",isLoggedIn,(req,res)=>{
 	})
 });
 
-app.put("/business/:businessId",isLoggedIn,(req,res)=>{
+app.put("/business/:businessId",isLoggedIn,isAuthorizedForBus,(req,res)=>{
 	req.body.days = JSON.parse(req.body.days);
 	Business.findOneAndUpdate({_id:req.params.businessId},{$set: req.body},{new:true},(err,bus)=>{
 		console.log(req.body);
@@ -177,7 +177,7 @@ app.put("/business/:businessId",isLoggedIn,(req,res)=>{
 	})
 });
 
-app.put("/order/:orderId/done",isLoggedIn,(req,res)=>{
+app.put("/order/:orderId/done",isLoggedIn,isAuthorizedForOrderFor,(req,res)=>{
 	let done=false;
 	if(req.body.done=='true'){
 		done=true;
@@ -271,7 +271,7 @@ app.post("/login",passport.authenticate("local",{successRedirect: '/',
 //DESTROY ROUTE
 //=================================================================================================================
 
-app.delete("/business/:businessId",isLoggedIn,(req,res)=>{
+app.delete("/business/:businessId",isLoggedIn,isAuthorizedForBus,(req,res)=>{
 	Business.findOneAndUpdate({_id:req.params.businessId},{deleted:true},{new:true},(err,business)=>{
 		res.redirect("/");
 
@@ -302,3 +302,25 @@ function isLoggedIn(req,res,next){
 	}
 	return res.redirect("/login");
 }
+
+function isAuthorizedForBus(req,res,next){
+	Business.findById(req.params.businessId,(err,business)=>{
+		if(business.owner.equals(req.user.id)){
+			next();
+		}else{
+			res.send("not authorized");
+		}
+	});
+	
+
+};
+
+function isAuthorizedForOrderFor(req,res,next){
+	Order.findById(req.params.orderId,).populate('forBusiness').exec((err,order)=>{
+		if(order.forBusiness.owner.equals(req.user.id)){
+			next();
+		}else{
+			res.send("not authorized");
+		}
+	});
+};
