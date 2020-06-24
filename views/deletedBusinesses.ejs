@@ -15,7 +15,7 @@
 				<p class="card-text"><%=business.days%></p>
 				<a href="#" class="card-link"><%=business.owner.username%></a>
 				<a href="#" class="card-link"><%=business.owner.email%></a>
-				<form action="/business/<%=business._id%>?_method=PUT" method="POST">
+				<form action="/business/<%=business._id%>/undodelete?_method=PUT" method="POST">
 					<button class="btn btn-primary">Undo Deletion</button>
 				</form>
 			</div>

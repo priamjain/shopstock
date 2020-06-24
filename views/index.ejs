@@ -20,6 +20,7 @@
 		<a href="/user/<%=user.id%>/deletedBusinesses" class="btn btn-success btn-lg">Deleted Business</a>
 	</div>
 	<div id="accordion mt-0">
+
 		<%user.businesses.forEach((bus)=>{if(!bus.deleted){%>
 		<div class="card ">
 			<div class="">
@@ -28,7 +29,7 @@
 						<%=bus.name%>
 					</a>
 					<a href="/business/<%=bus._id%>/edit" class="align-self-center mr-3">Edit</a>
-					<form action="/businesses/<%=bus._id%>?_method=DELETE" method="POST">
+					<form action="/business/<%=bus._id%>?_method=DELETE" method="POST">
 						<button type="submit" class="btn btn-link">Delete</button>
 					</form>
 				</div>

@@ -41,6 +41,11 @@ passport.use(User.createStrategy())
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req,res,next)=>{
+	res.locals.user = req.user;
+
+	next();
+})
 
 //====================================================================================================================
 //GET ROUTES
@@ -54,47 +59,43 @@ app.get("/",(req,res)=>{
 				console.log(err);
 			}
 			else{
-				res.render("index",{user:user});}
+				res.locals.user = user;
+				res.render("index");}
 		});
 	} 
 	else {
-		res.render("index",{user:req.user});
+		res.render("index");
 	}
 });
 
 app.get("/user/:userId/edit",isLoggedIn,(req,res)=>{
 	res.locals.page='user';
-	User.findOne({_id:req.user.id},(err,user)=>{
-		if(err){
-			return console.log(err);
-		}
-		res.render('user',{user:user})	
-	})
-	
+	res.render('user');	
 });
 
 app.get("/user/:userId/deletedBusinesses",isLoggedIn,(req,res)=>{
 	res.locals.page='deletedBusinesses';
 	User.findById(req.user.id,'businesses').populate('businesses').exec((err,user)=>{
-		res.render('deletedBusinesses',{user:user})
+		res.locals.user = user;
+		res.render('deletedBusinesses');
 	});
 });
 
 app.get("/business",(req,res)=>{
 	res.locals.page="businesses";
 	Business.search(req.query.q).populate('owner').exec((err,businesses)=>{
-		res.render("businesses",{user:req.user,businesses:businesses});
+		res.render("businesses",{businesses:businesses});
 	});
 });
 
 app.get("/business/new",isLoggedIn,(req,res)=>{
 	res.locals.page = "newBusiness";
-	res.render("newBusiness",{user:req.user});
+	res.render("newBusiness");
 });
 
 app.get("/business/:businessId/order/new",isLoggedIn,(req,res)=>{
 	res.locals.page = "newOrders";
-	res.render("newOrder",{user:req.user,forBusiness:req.params.businessId});
+	res.render("newOrder",{forBusiness:req.params.businessId});
 });
 
 app.get("/business/:businessId/edit",isLoggedIn,(req,res)=>{
@@ -105,14 +106,14 @@ app.get("/business/:businessId/edit",isLoggedIn,(req,res)=>{
 		}
 		console.log(business);
 		res.locals.page = "editBusiness";
-		res.render("editBusiness",{user:req.user,business:business});
+		res.render("editBusiness",{business:business});
 	})
 });
 
 app.get("/orders",isLoggedIn,(req,res)=>{
 	res.locals.page = "orders";
 	Order.find({byUser:req.user._id},(err,orders)=>{
-		res.render('orders',{user:req.user,orders:orders});
+		res.render('orders',{orders:orders});
 	});
 });
 
@@ -124,7 +125,7 @@ app.get("/order/:orderId",isLoggedIn,(req,res)=>{
 			return res.send(err);
 		}
 		// console.log(order);
-		res.render("order",{user:req.user,order:order});
+		res.render("order",{order:order});
 	});
 });
 
@@ -137,7 +138,7 @@ app.get("/login",function(req,res,next){
 		return next();
 	};
 },function(req,res){
-	res.render("loginPage",{user:req.user,info:req.query.info});
+	res.render("loginPage",{info:req.query.info});
 });
 
 app.get("/logout",function(req,res){
@@ -150,7 +151,7 @@ app.get("/logout",function(req,res){
 //PUT ROUTES
 //===========================================================================================================================
 
-app.put("/business/:businessId",isLoggedIn,(req,res)=>{
+app.put("/business/:businessId/undodelete",isLoggedIn,(req,res)=>{
 	Business.findOneAndUpdate({_id:req.params.businessId},{deleted:false},{new:true},(err,business)=>{
 		res.redirect("/");
 
@@ -171,7 +172,7 @@ app.put("/user/:userId",isLoggedIn,(req,res)=>{
 app.put("/business/:businessId",isLoggedIn,(req,res)=>{
 	req.body.days = JSON.parse(req.body.days);
 	Business.findOneAndUpdate({_id:req.params.businessId},{$set: req.body},{new:true},(err,bus)=>{
-		console.log(bus);
+		console.log(req.body);
 		res.redirect("/");
 	})
 });
